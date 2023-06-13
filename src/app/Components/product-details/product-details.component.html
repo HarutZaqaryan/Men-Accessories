@@ -1,0 +1,77 @@
+<div class="product">
+  <div class="container">
+    <div class="product__container">
+      <div class="product__detail-content">
+        <div class="product__gallery">
+          <div>
+            <div (click)="goToPrevious()" class="leftArrow">❰</div>
+            <div (click)="goToNext()" class="rightArrow">❱</div>
+          </div>
+          <img
+            [src]="getCurrentSlideUrl()"
+            alt="Product Image"
+            class="product__detail-img"
+          />
+          <div class="dotsContainer">
+            <div
+              *ngFor="let image of images; let slideIndex = index"
+              class="dot"
+              (click)="goToSlide(slideIndex)"
+            >
+              ●
+            </div>
+          </div>
+        </div>
+        <div class="product__info">
+          <h2 class="product__name">{{ product.title }}</h2>
+          <hr />
+          <p>
+            <span class="info-field">Price: </span
+            ><span class="product__price">{{ product.price | currency }}</span>
+          </p>
+          <p>
+            <span class="info-field">Brand: </span
+            ><span class="product__price product-brand">{{ product.brand }}</span>
+          </p>
+          <p>
+            <span class="info-field">Category: </span
+            ><span class="product__price product-category">{{ product.category | titlecase}}</span>
+          </p>
+          <p>
+            <span class="info-field">Description: </span
+            ><span class="product__desciption">{{ product.description }}</span>
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="product__detail-actions">
+        <div class="back">
+          <button class="btn btn-secondary" routerLink="/products">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+        <div class="actions">
+          <button
+            href="#"
+            class="btn btn-warning edit__menu-btn"
+            [matMenuTriggerFor]="menu"
+            [disabled]="product.disableEdit"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openDialog(product)">Edit</button>
+            <button mat-menu-item (click)="deleteProduct(product.id)">Delete</button>
+          </mat-menu>
+          <a
+            class="btn btn-primary add-to-cart_btn"
+            style="width: 140px"
+            (click)="addToCart(product)"
+            >Add To Cart</a
+          >
+          <a href="#" class="btn btn-success buy-btn">Buy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
