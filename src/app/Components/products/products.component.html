@@ -1,0 +1,106 @@
+<div class="products">
+  <div class="container">
+    <div class="to-top" [ngClass]="{ 'show-to_top': windowScrolled }">
+      <button class="btn-to_top" (click)="scrollToTop()">
+        <mat-icon>arrow_upward</mat-icon>
+      </button>
+    </div>
+    <div class="products__container">
+      <div class="products__search">
+        <mat-form-field class="example-form-field search-field">
+          <mat-label>Search For Product</mat-label>
+          <input matInput type="text" placeholder="Search" #searchInput />
+          <button
+            class="close-btn"
+            *ngIf="value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="value = ''"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field class="filter-field">
+          <mat-label>Category</mat-label>
+          <mat-select matNativeControl required #filterInput>
+            <mat-option value="">All Categories</mat-option>
+            <mat-option value="Watch">Watch</mat-option>
+            <mat-option value="Jewelry">Jewelry</mat-option>
+            <mat-option value="Belt">Belt</mat-option>
+            <mat-option value="SunGlass">SunGlass</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          type="button"
+          class="btn btn-secondary btn-search"
+          (click)="search(searchInput, filterInput)"
+        >
+          Search
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-add_product"
+          (click)="openDialog()"
+        >
+          Add New Product
+        </button>
+      </div>
+      <div class="products__content" *ngIf="!noData">
+        <div class="card product__card" *ngFor="let product of products">
+          <img
+            [src]="product.image"
+            class="card-img-top"
+            alt="..."
+            [routerLink]="['/product', product.id]"
+            *ngIf="product.image"
+          />
+          <img
+            src="../../../assets/Images/image-not-found.png"
+            alt="Image Not Found"
+            class="card-img-top"
+            [routerLink]="['/product', product.id]"
+            style="width: 170px;"
+            *ngIf="!product.image"
+          />
+          <div class="card-body">
+            <h3 class="card-title card-price">
+              <strong>{{ product.price | currency }}</strong>
+            </h3>
+            <h3 class="card-title card-price card-brand">
+              <strong>{{ product.brand }}</strong>
+            </h3>
+            <p class="card-text card-name">{{ product.title }}</p>
+            <p class="card-text card-description">
+              {{ product.description }}
+            </p>
+            <div class="actions">
+              <button
+                href="#"
+                class="btn btn-warning"
+                [matMenuTriggerFor]="menu"
+                [disabled]="product.disableEdit"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialog(product)">Edit</button>
+                <button mat-menu-item (click)="deleteProduct(product.id)">Delete</button>
+              </mat-menu>
+              <a
+                class="btn btn-primary add-to-cart_btn"
+                style="width: 140px"
+                (click)="addToCart(product)"
+                >Add To Cart</a
+              >
+              <a href="#" class="btn btn-success">Buy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no_data" *ngIf="noData">
+        <p class="no_data-text">No Matching data</p>
+      </div>
+    </div>
+  </div>
+</div>

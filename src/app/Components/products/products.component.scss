@@ -1,0 +1,465 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.products {
+  background-color: #191b1c;
+  margin-top: 80px;
+  padding-top: 30px;
+  min-height: 1200px;
+}
+
+.container {
+  padding: 15px;
+  max-width: 1250px;
+  margin: auto;
+  position: relative;
+}
+
+.to-top {
+  position: fixed;
+  right: 30px;
+  bottom: 50px;
+  width: 30px;
+  height: 40px;
+  z-index: 10;
+  display: none;
+}
+
+.show-to_top {
+  display: block;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-to_top {
+  border-radius: 10px;
+}
+
+.products__container {
+  max-width: 1110px;
+  margin: 50px auto;
+}
+
+.btn-add_product {
+  width: 100%;
+  height: 65px;
+  font-size: 27px;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 550px;
+}
+
+.filter-field {
+  width: 350px;
+  margin-left: 10px;
+}
+
+.close-btn {
+  background: none;
+  color: white;
+  border: none;
+  margin-right: 10px;
+}
+
+.btn-search {
+  margin-left: 10px;
+  width: 190px;
+  height: 57px;
+  margin-top: -18px;
+  font-size: 23px;
+}
+
+.products__content {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.product__card {
+  // max-width:330px;
+  width: 330px;
+  img {
+    width: 170px;
+    height: 270px;
+    margin: 15px auto;
+    cursor: pointer;
+  }
+}
+
+.card-price {
+  font-family: "PT Sans";
+  font-weight: 700;
+  line-height: 50px;
+  font-size: 25px;
+}
+
+.card-name {
+  font-family: "Playfair Display";
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 45px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-brand {
+  color: #0d6efd;
+}
+
+.card-description {
+  font-family: "Playfair Display";
+  font-weight: 400;
+  font-size: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.no_data-text {
+  color: #fff;
+  font-size: 35px;
+  margin-top: 60px;
+  max-width: 300px;
+}
+
+.green-snackbar {
+  background-color: green;
+}
+
+// !M.W-1170px
+@media (max-width: 1170px) {
+  .products__container {
+    max-width: 1060px;
+  }
+
+  .search-field {
+    width: 520px;
+  }
+
+  .filter-field {
+    width: 320px;
+  }
+
+  .btn-search {
+    width: 199px;
+  }
+
+  .products__content {
+    gap: 35px;
+  }
+}
+
+// !M.W-1100px
+@media (max-width: 1100px) {
+  .products__container {
+    max-width: 951px;
+  }
+
+  .search-field {
+    width: 470px;
+  }
+
+  .filter-field {
+    width: 280px;
+  }
+
+  .btn-search {
+    width: 180px;
+    font-size: 21px;
+  }
+
+  .products__content {
+    gap: 30px;
+  }
+
+  .product__card {
+    max-width: 296px;
+  }
+}
+
+// !M.W-1000px
+@media (max-width: 1000px) {
+  .products__container {
+    max-width: 911px;
+  }
+
+  .search-field {
+    width: 450px;
+  }
+
+  .filter-field {
+    width: 277px;
+  }
+
+  .btn-search {
+    width: 160px;
+    font-size: 20px;
+  }
+
+  .products__content {
+    gap: 25px;
+  }
+
+  .product__card {
+    max-width: 285px;
+  }
+
+  .card-price {
+    font-size: 23px;
+  }
+
+  .card-name {
+    font-size: 18px;
+  }
+
+  .card-description {
+    font-size: 16px;
+  }
+}
+
+// !M.W-940px
+@media (max-width: 940px) {
+  .products__container {
+    max-width: 700px;
+  }
+
+  .search-field {
+    width: 300px;
+  }
+
+  .filter-field {
+    width: 220px;
+  }
+
+  .products__content {
+    gap: 70px;
+  }
+
+  .product__card {
+    max-width: 315px;
+  }
+}
+
+// !M.W-770px
+@media (max-width: 770px) {
+  .products__container {
+    max-width: 600px;
+  }
+
+  .search-field {
+    width: 281px;
+  }
+
+  .filter-field {
+    width: 163px;
+    margin-left: 35px;
+  }
+
+  .btn-search {
+    width: 110px;
+    font-size: 15px;
+  }
+
+  .btn-add_product {
+    width: 100%;
+    height: 60px;
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
+
+  .products__content {
+    gap: 30px;
+  }
+
+  .product__card {
+    max-width: 285px;
+  }
+}
+
+// !M.W-650px
+@media (max-width: 650px) {
+  .products__container {
+    max-width: 531px;
+  }
+
+  .search-field {
+    width: 250px;
+  }
+
+  .filter-field {
+    width: 140px;
+  }
+
+  .btn-search {
+    width: 90px;
+    font-size: 14px;
+  }
+
+  .product__card {
+    max-width: 250px;
+    img {
+      height: 250px;
+    }
+  }
+
+  .actions {
+    flex-direction: column;
+    .add-to-cart_btn {
+      width: 100% !important;
+    }
+  }
+
+  .card-price {
+    font-size: 21px;
+  }
+
+  .card-name {
+    font-size: 16px;
+  }
+
+  .card-description {
+    font-size: 14px;
+  }
+
+  .btn-add_product {
+    font-size: 23px;
+  }
+}
+
+// !M.W-560px
+@media (max-width: 560px) {
+  .products__container {
+    max-width: 486px;
+  }
+
+  .product__card {
+    max-width: 230px;
+    img {
+      height: 240px;
+    }
+  }
+
+  .search-field {
+    width: 485px;
+  }
+
+  .filter-field {
+    width: 230px;
+    margin-left: 0;
+  }
+
+  .btn-search {
+    width: 230px;
+    font-size: 20px;
+    margin-left: 25px;
+  }
+
+  .products__content {
+    gap: 25px;
+  }
+
+  .card-price {
+    line-height: 35px;
+  }
+
+  .card-name {
+    line-height: 25px;
+    font-size: 15px;
+  }
+}
+
+// !M.W-520px
+@media (max-width: 520px) {
+  .products__container {
+    max-width: 331px;
+  }
+
+  .product__card {
+    max-width: 330px;
+  }
+
+  .search-field {
+    width: 330px;
+  }
+
+  .filter-field {
+    width: 165px;
+  }
+
+  .btn-search {
+    width: 155px;
+    font-size: 17px;
+    margin-left: 10px;
+  }
+  .no_data-text {
+    font-size: 25px;
+  }
+}
+
+// !M.W-360px
+@media (max-width: 360px) {
+  .products__container {
+    max-width: 242px;
+  }
+
+  .product__card {
+    max-width: 240px;
+  }
+
+  .search-field,
+  .filter-field {
+    width: 240px;
+  }
+
+  .btn-search {
+    width: 240px;
+    font-size: 19px;
+    margin-left: 0;
+    margin-top: 5px;
+    margin-bottom: 35px;
+    position: relative;
+    &::after {
+      content: "";
+      border: 2px solid #fff;
+      width: 100%;
+      bottom: -15px;
+      left: 0;
+      right: 0;
+      position: absolute;
+    }
+  }
+
+  .btn-add_product {
+    font-size: 21px;
+  }
+}
+
+// !M.W-270px
+@media (max-width: 270px) {
+  .products__container {
+    max-width: 202px;
+  }
+
+  .product__card {
+    max-width: 200px;
+  }
+
+  .search-field,
+  .filter-field,
+  .btn-search {
+    max-width: 200px;
+  }
+}
