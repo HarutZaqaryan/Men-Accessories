@@ -13,32 +13,38 @@ export class CartService {
 
   constructor(private http: HttpClient) {}
 
+  // * Get PRoducts From Cart
   getCartProducts() {
     return this.http.get<IProducts[]>(this.cartUrl);
   }
 
+  // * Add Product To Cart
   addToCart(product: IProducts) {
     this.cart.push(product);
     this.cartList.next(this.cart);
     return this.http.post<IProducts>(this.cartUrl, product);
   }
 
+  // * Update Product In Cart
   updateInCart(product: IProducts) {
     return this.http.put<IProducts>(`${this.cartUrl}/${product.id}`, product);
   }
 
+  // * Delete Product From Cart
   deleteProductFromCart(id: number) {
     this.cart = this.cart.filter((item) => item.id !== id);
     this.cartList.next(this.cart);
     return this.http.delete<IProducts>(`${this.cartUrl}/${id}`);
   }
 
+  // * Delete All Products From Cart
   deleteAllProductsFromCart() {
     this.cart = [];
     this.cartList.next(this.cart);
     return this.http.delete(this.cartUrl);
   }
 
+  // * Get Cart Items
   getCartList(){
     return this.cartList.asObservable();
   }

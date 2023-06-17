@@ -1,0 +1,82 @@
+<!-- ! Pop Up Header -->
+<h2 mat-dialog-title style="margin-bottom: -10px">
+  {{ isNewProduct ? "Add" : "Edit" }} Product
+</h2>
+<hr style="color: #fff" />
+<mat-dialog-content>
+  <!-- ! Pop Up Form -->
+  <form class="example-form" [formGroup]="popUpForm" (input)="allowSubmit()">
+    <!-- Name Field -->
+    <mat-form-field class="example-full-width p_name-field">
+      <mat-label>Product Name</mat-label>
+      <input matInput placeholder="Name" formControlName="title" />
+    </mat-form-field>
+    <!-- Brnad Field -->
+    <mat-form-field class="example-full-width p_name-field p_brand-field">
+      <mat-label>Product Brand</mat-label>
+      <input matInput placeholder="Brand" formControlName="brand" />
+    </mat-form-field>
+    <!-- Price Field -->
+    <mat-form-field class="example-full-width p_name-field">
+      <mat-label>Product Price</mat-label>
+      <input
+        matInput
+        placeholder="Price"
+        type="number"
+        formControlName="price"
+      />
+    </mat-form-field>
+    <!-- Category Field -->
+    <mat-form-field class="filter-field category-field">
+      <mat-label>Product Category</mat-label>
+      <mat-select matNativeControl required formControlName="category">
+        <mat-option value="Watch">Watch</mat-option>
+        <mat-option value="Jewlery">Jewlery</mat-option>
+        <mat-option value="Belt">Belt</mat-option>
+        <mat-option value="SunGlass">SunGlass</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- Image Field -->
+    <mat-form-field class="file-field">
+      <mat-label>Product Image</mat-label>
+      <button
+        mat-icon-button
+        matPrefix
+        (click)="f_input.click()"
+        class="choose-btn"
+        title="Choose File "
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+      <input type="text" readonly matInput />
+      <input type="file" multiple hidden #f_input formControlName="image" (change)="fileInputChange($event)"/>
+      <mat-error>this field is required</mat-error>
+    </mat-form-field>
+    <!-- Description Field -->
+    <mat-form-field class="example-full-width p_name-field">
+      <mat-label>Product Description</mat-label>
+      <textarea
+        matInput
+        placeholder="Description"
+        formControlName="description"
+      ></textarea>
+    </mat-form-field>
+    <!-- ! Pop UP Actions -->
+    <mat-dialog-actions>
+      <button mat-flat-button color="warn" type="button" (click)="cancel()">
+        Cancel
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        class="confirm-btn"
+        mat-dialog-close
+        type="submit"
+        (click)="formSubmit()"
+        [disabled]="disabledBtn"
+      >
+        {{ isNewProduct ? "Add" : "Edit" }} Product
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

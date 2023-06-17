@@ -8,7 +8,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [CartComponent],
-  imports: [CommonModule, RouterModule, CartRoutingModule, MaterialModule, MatPaginatorModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    CartRoutingModule,
+    MaterialModule,
+    MatPaginatorModule,
+  ],
   exports: [CartComponent],
 })
 export class CartModule {}

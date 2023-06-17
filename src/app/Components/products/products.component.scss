@@ -81,7 +81,6 @@
 }
 
 .product__card {
-  // max-width:330px;
   width: 330px;
   img {
     width: 170px;
@@ -138,6 +137,8 @@
 .green-snackbar {
   background-color: green;
 }
+
+// ! Media Requests
 
 // !M.W-1170px
 @media (max-width: 1170px) {

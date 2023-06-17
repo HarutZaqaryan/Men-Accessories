@@ -39,8 +39,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
     public _snackBar: MatSnackBar
   ) {}
 
-  // constructor(private _snackBar: MatSnackBar) {}
+  ngOnInit(): void {
+    this.getAllProducts();
+    this.getCartProducts();
+  }
 
+  // * Show Notification(snackar)
   openSnackBar(message: string, action?: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
@@ -48,11 +52,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.getAllProducts();
-    this.getCartProducts();
-  }
 
+  // * Listener For Window(scroll)
   @HostListener('window:scroll', [])
   onWindowScroll() {
     if (
@@ -70,11 +71,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // * Scroll To Top
   scrollToTop() {
     this.document.body.scrollIntoView({ behavior: 'smooth' });
     this.windowScrolled = false;
   }
 
+  // * Get All Products
   getAllProducts() {
     this.productSubscription = this.productService
       .getAllProducts()
@@ -85,9 +88,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // * Search for products
   search(searchInput: any, filterInput: any) {
     this.products = this.products_reserve.reverse();
 
+    // When Searching with name
     if (searchInput.value !== '') {
       this.products = this.products.filter((item) =>
         item.title
@@ -97,6 +102,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       );
     }
 
+    // When searching with category
     if (filterInput.value) {
       this.products = this.products.filter(
         (item) =>
@@ -104,6 +110,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       );
     }
 
+    // When searching & filtering together
     if (searchInput.value !== '' && filterInput.value) {
       this.products = this.products.filter(
         (item) =>
@@ -122,6 +129,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // * Open Pop Up
   openDialog(product?: IProducts) {
     const dialogRef = this.dialog.open(PopupComponent, {
       width: '470px',
@@ -140,14 +148,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // * Add New Product
   addNewProduct(product: IProducts) {
     this.productService.addNewProduct(product).subscribe((data) => {
-      // this.products.unshift(data);
       this.products.push(data);
       this.products.reverse();
     });
   }
 
+  // * Edit Product
   editProduct(product: IProducts) {
     this.productService.editProduct(product).subscribe((data) => {
       this.products = this.products.map((product) => {
@@ -160,12 +169,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // * Delete Product
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe((data) => {
       this.products = this.products.filter((product) => product.id !== id);
     });
   }
 
+  // * Get Products From Cart
   getCartProducts() {
     this.cartSubscription = this.cartService
       .getCartProducts()
@@ -174,6 +185,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // * Add Product To Cart
   addToCart(product: IProducts) {
     product.quantity = 1;
     product.totalPrice = product.price;
@@ -197,12 +209,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // * Update Product In Cart
   updateInCart(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
     this.cartService.updateInCart(product).subscribe((data) => {});
   }
 
+  
   ngOnDestroy(): void {
     if (this.productSubscription) {
       this.productSubscription.unsubscribe();

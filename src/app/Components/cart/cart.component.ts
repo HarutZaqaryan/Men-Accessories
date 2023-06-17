@@ -26,7 +26,7 @@ export class CartComponent implements OnInit, OnDestroy {
   cartSubscription: Subscription;
   cart: IProducts[] = [];
   emptyCart: boolean = true;
-  totalPrice:number = 0;
+  totalPrice: number = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -38,8 +38,9 @@ export class CartComponent implements OnInit, OnDestroy {
     this.getTotalPrice();
   }
 
+  // * Get Products From Cart
   getCartProducts(): void {
-    this.totalPrice = 0
+    this.totalPrice = 0;
     this.cartSubscription = this.cartService
       .getCartProducts()
       .subscribe((res) => {
@@ -56,6 +57,7 @@ export class CartComponent implements OnInit, OnDestroy {
       });
   }
 
+  // * Filter Products
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -65,6 +67,7 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
+  // * Decrement product quantity
   decrementQuantity(product: IProducts) {
     if (product.quantity === 1) {
       this.deleteProductFromCart(product);
@@ -74,19 +77,21 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartService.updateInCart(product).subscribe((data) => {
         console.log('Product quantity has been updated in cart');
       });
-      this.getTotalPrice()
+      this.getTotalPrice();
     }
   }
 
+  // * Increment product quantity
   incrementQuantity(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
     this.cartService.updateInCart(product).subscribe((data) => {
       console.log('Product quantity has been updated in cart');
     });
-    this.getTotalPrice()
+    this.getTotalPrice();
   }
 
+  // * Delete Product From Cart
   deleteProductFromCart(product: IProducts) {
     this.totalPrice = 0;
     this.cartService.deleteProductFromCart(product.id).subscribe((data) => {
@@ -96,23 +101,26 @@ export class CartComponent implements OnInit, OnDestroy {
       if (this.cart.length === 0) {
         this.emptyCart = true;
       }
-      this.getTotalPrice()
+      this.getTotalPrice();
       console.log('product has been deleted from cart');
     });
   }
 
+  // * Buy Product From Cart
   buyProductFromCart(product: IProducts) {
     console.log(`${product.title} has been buyed from cart`);
     this.deleteProductFromCart(product);
   }
 
+  // * Get Total Price
   getTotalPrice() {
-    this.totalPrice = 0
-    for(let i = 0; i< this.cart.length; i++) {
-      this.totalPrice += this.cart[i].totalPrice!
+    this.totalPrice = 0;
+    for (let i = 0; i < this.cart.length; i++) {
+      this.totalPrice += this.cart[i].totalPrice!;
     }
   }
 
+  // * Delete All Products From Cart
   cleanCart() {
     this.cart = [];
     this.dataSource = new MatTableDataSource(this.cart);
@@ -139,9 +147,10 @@ export class CartComponent implements OnInit, OnDestroy {
     // });
   }
 
-  buyAllProducts() {
-  }
+  // * Buy All Products From Cart
+  buyAllProducts() {}
 
+  // * Destroy
   ngOnDestroy(): void {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();

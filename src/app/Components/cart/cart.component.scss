@@ -129,6 +129,7 @@ mat-form-field {
   flex-direction: column;
   column-gap: 20px;
 }
+
 .plus-minus {
   display: flex;
   justify-content: space-between;
@@ -148,6 +149,7 @@ mat-form-field {
     }
   }
 }
+
 .configure {
   display: flex;
   justify-content: space-between;
@@ -191,6 +193,8 @@ mat-form-field {
     }
   }
 }
+
+// ! Media Requests
 
 @media (max-width: 1150px) {
   .total-price_container {
@@ -344,20 +348,6 @@ mat-form-field {
   }
 }
 
-// @media (max-width: 570px) {
-//   .product-img {
-//     width: 50px;
-//     height: 85px;
-//     border-radius: 5px;
-//   }
-
-//   .title-field {
-//     p {
-//       font-size: 13px;
-//     }
-//   }
-// }
-
 @media (max-width: 570px) {
   .product-img {
     width: 50px;
@@ -393,10 +383,9 @@ mat-form-field {
     }
   }
 
-  
   .mat-mdc-text-field-wrapper {
     width: 75%;
-}
+  }
 }
 
 @media (max-width: 550px) {

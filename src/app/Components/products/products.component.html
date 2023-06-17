@@ -1,11 +1,15 @@
 <div class="products">
   <div class="container">
+    <!-- ! Button To Top -->
     <div class="to-top" [ngClass]="{ 'show-to_top': windowScrolled }">
       <button class="btn-to_top" (click)="scrollToTop()">
         <mat-icon>arrow_upward</mat-icon>
       </button>
     </div>
+
+    <!-- ! Products Container -->
     <div class="products__container">
+      <!-- ! Search & Add Container -->
       <div class="products__search">
         <mat-form-field class="example-form-field search-field">
           <mat-label>Search For Product</mat-label>
@@ -46,6 +50,7 @@
           Add New Product
         </button>
       </div>
+      <!-- ! Products List -->
       <div class="products__content" *ngIf="!noData">
         <div class="card product__card" *ngFor="let product of products">
           <img
@@ -60,7 +65,7 @@
             alt="Image Not Found"
             class="card-img-top"
             [routerLink]="['/product', product.id]"
-            style="width: 170px;"
+            style="width: 170px"
             *ngIf="!product.image"
           />
           <div class="card-body">
@@ -84,8 +89,12 @@
                 <mat-icon>edit</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="openDialog(product)">Edit</button>
-                <button mat-menu-item (click)="deleteProduct(product.id)">Delete</button>
+                <button mat-menu-item (click)="openDialog(product)">
+                  Edit
+                </button>
+                <button mat-menu-item (click)="deleteProduct(product.id)">
+                  Delete
+                </button>
               </mat-menu>
               <a
                 class="btn btn-primary add-to-cart_btn"
@@ -98,6 +107,8 @@
           </div>
         </div>
       </div>
+
+      <!-- ! Container should render, wen products list are empty or somethig is wrong in server side -->
       <div class="no_data" *ngIf="noData">
         <p class="no_data-text">No Matching data</p>
       </div>

@@ -2,6 +2,7 @@
   <div class="container">
     <div class="product__container">
       <div class="product__detail-content">
+        <!-- ! Product Images -->
         <div class="product__gallery">
           <div>
             <div (click)="goToPrevious()" class="leftArrow">❰</div>
@@ -22,6 +23,7 @@
             </div>
           </div>
         </div>
+        <!-- ! Product Detail Content -->
         <div class="product__info">
           <h2 class="product__name">{{ product.title }}</h2>
           <hr />
@@ -44,6 +46,7 @@
         </div>
       </div>
       <hr />
+      <!-- ! Actions -->
       <div class="product__detail-actions">
         <div class="back">
           <button class="btn btn-secondary" routerLink="/products">

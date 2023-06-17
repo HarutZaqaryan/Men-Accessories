@@ -35,6 +35,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.resetTimer();
   }
 
+  // * Open Pop Up
   openDialog(product?:IProducts) {
     const dialogRef = this.dialog.open(PopupComponent, {
       width: '455px',
@@ -49,6 +50,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // * Get All Products
   getAllProducts() {
     this.productSubscription = this.productService
       .getAllProducts()
@@ -57,6 +59,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // * Get Individual Product With ID
   getProductDetail() {
     this.productSubscription = this.route.data.subscribe((res) => {
       this.product = res['data'];
@@ -68,6 +71,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // * Reset Timer (Gallery)
   resetTimer() {
     if (this.timeoutId) {
       window.clearTimeout(this.timeoutId);
@@ -75,6 +79,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.timeoutId = window.setTimeout(() => this.goToNext(), 5000);
   }
 
+  // * Previous Image Button
   goToPrevious(): void {
     const isFirstSlide = this.currentIndex === 0;
     const newIndex = isFirstSlide
@@ -85,6 +90,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.currentIndex = newIndex;
   }
 
+  // * Next Image Button
   goToNext(): void {
     const isLastSlide = this.currentIndex === this.images.length - 1;
     const newIndex = isLastSlide ? 0 : this.currentIndex + 1;
@@ -93,15 +99,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.currentIndex = newIndex;
   }
 
+  // * Slide Gallery
   goToSlide(slideIndex: number): void {
     this.resetTimer();
     this.currentIndex = slideIndex;
   }
 
+  // * Get Current Slide Url
   getCurrentSlideUrl() {
     return this.images[this.currentIndex].url;
   }
 
+  // * Add Product To Cart
   addToCart(product: IProducts) {
     this.cartSubscription = this.cartService
       .addToCart(product)
@@ -110,6 +119,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  // * Edit Product
   editProduct(product: IProducts) {
     this.productService.editProduct(product).subscribe((data) => {
       this.products = this.products.map((product) => {
@@ -123,6 +133,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // * Delete Product
   deleteProduct(id:number) {
     this.productService.deleteProduct(id).subscribe(data => {
       this.products = this.products.filter((product) => product.id !== id )

@@ -1,12 +1,17 @@
 <div class="cart">
   <div class="container">
+
+    <!-- ! Container sholud render, when cart is mpty -->
     <div class="empty-cart" *ngIf="emptyCart">
       <!-- <img src="../../../assets/Cart/empty_cart.png" alt="Empty Cart" /> -->
       <button class="btn btn-secondary products-btn">
         <a routerLink="/products">Products</a>
       </button>
     </div>
+
+    <!-- !  Cart Container-->
     <div class="cart__container" *ngIf="!emptyCart">
+      <!-- ! Search Field -->
       <div class="header">
         <mat-form-field>
           <mat-label>Search</mat-label>
@@ -19,6 +24,7 @@
         </mat-form-field>
       </div>
 
+      <!-- ! Cart Table -->
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>
           <!-- Image Column -->
@@ -188,7 +194,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-          <!-- Row shown when there is no matching data. -->
+          <!-- Row sholud render, when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td
               class="mat-cell"
@@ -201,6 +207,8 @@
           </tr>
         </table>
       </div>
+
+      <!-- ! General Actions -->
       <div class="general-actions">
         <div class="btn-container">
           <button
@@ -210,14 +218,24 @@
           >
             Add Product
           </button>
-          <button type="button" class="btn btn-danger" (click)="cleanCart()">Clean Cart</button>
-          <button type="button" class="btn btn-success" (click)="buyAllProducts()">Buy All</button>
+          <button type="button" class="btn btn-danger" (click)="cleanCart()">
+            Clean Cart
+          </button>
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="buyAllProducts()"
+          >
+            Buy All
+          </button>
           <div class="total">
-            <p><strong>Total Price: </strong>{{totalPrice | currency}}</p>
+            <p><strong>Total Price: </strong>{{ totalPrice | currency }}</p>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- ! Container Paginator -->
     <div class="paginator__container">
       <mat-paginator
         class="paginator__container"
