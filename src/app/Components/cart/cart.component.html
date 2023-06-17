@@ -1,0 +1,231 @@
+<div class="cart">
+  <div class="container">
+    <div class="empty-cart" *ngIf="emptyCart">
+      <!-- <img src="../../../assets/Cart/empty_cart.png" alt="Empty Cart" /> -->
+      <button class="btn btn-secondary products-btn">
+        <a routerLink="/products">Products</a>
+      </button>
+    </div>
+    <div class="cart__container" *ngIf="!emptyCart">
+      <div class="header">
+        <mat-form-field>
+          <mat-label>Search</mat-label>
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Product Name"
+            #input
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Image Column -->
+          <ng-container matColumnDef="image" class="image-field">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="image-fielheader"
+            >
+              Image
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let row"
+              class="image-field"
+              [routerLink]="['/product', row.id]"
+            >
+              <img
+                [src]="row.image"
+                alt="Image"
+                class="product-img"
+                [title]="row.title"
+              />
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="name-field_header"
+            >
+              Name
+            </th>
+            <td mat-cell *matCellDef="let row" class="title-field">
+              <p class="title-field_text">{{ row.title }}</p>
+            </td>
+          </ng-container>
+
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="price-field_header"
+            >
+              Price
+            </th>
+            <td mat-cell *matCellDef="let row" class="price-field">
+              <p class="price-field_text">{{ row.price | currency }}</p>
+            </td>
+          </ng-container>
+
+          <!-- Brannd Column -->
+          <ng-container matColumnDef="brand">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="brand-field_header"
+            >
+              Brand
+            </th>
+            <td mat-cell *matCellDef="let row" class="brand-field">
+              <p class="brand-field_text">{{ row.brand }}</p>
+            </td>
+          </ng-container>
+
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="category-field_header"
+            >
+              Category
+            </th>
+            <td mat-cell *matCellDef="let row" class="category-field">
+              <p class="category-field_text">{{ row.category | titlecase }}</p>
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="description-field_header"
+            >
+              Description
+            </th>
+            <td mat-cell *matCellDef="let row" class="description-field">
+              <p class="description-field_text">
+                {{ row.description }}
+              </p>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="actions-field_header"
+            >
+              Actions
+            </th>
+            <td mat-cell *matCellDef="let row" class="actions-field">
+              <div class="actions">
+                <div class="plus-minus">
+                  <button
+                    class="btn btn-secondary minus-btn"
+                    (click)="decrementQuantity(row)"
+                  >
+                    <p><strong>-</strong></p>
+                  </button>
+                  <p class="product-count">{{ row.quantity }}</p>
+                  <button
+                    class="btn btn-secondary plus-btn"
+                    (click)="incrementQuantity(row)"
+                  >
+                    <p><strong>+</strong></p>
+                  </button>
+                </div>
+                <div class="configure">
+                  <button
+                    class="btn btn-danger delete-btn"
+                    (click)="deleteProductFromCart(row)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button
+                    class="btn btn-success buy-btn"
+                    (click)="buyProductFromCart(row)"
+                  >
+                    <mat-icon>check_circle_outline</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Total-Price Column -->
+          <ng-container matColumnDef="total-price">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="total-price-field_header"
+            >
+              Total
+            </th>
+            <td mat-cell *matCellDef="let row" class="total-price-field">
+              <p class="total-price-field_text">
+                {{ row.totalPrice | currency }}
+              </p>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td
+              class="mat-cell"
+              colspan="4"
+              style="padding: 30px; color: #fff; font-size: 25px"
+              ;
+            >
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="general-actions">
+        <div class="btn-container">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            routerLink="/products"
+          >
+            Add Product
+          </button>
+          <button type="button" class="btn btn-danger" (click)="cleanCart()">Clean Cart</button>
+          <button type="button" class="btn btn-success" (click)="buyAllProducts()">Buy All</button>
+          <div class="total">
+            <p><strong>Total Price: </strong>{{totalPrice | currency}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="paginator__container">
+      <mat-paginator
+        class="paginator__container"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page of users"
+        [ngClass]="{ none: emptyCart }"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
