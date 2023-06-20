@@ -27,13 +27,13 @@ The design of this page was taken from here: 'https://www.figma.com/file/WJBuEvf
 # Products Page
 
 The ***Products Page*** was written in Html and Scss, with using Bootstrap & Angular Material Components.
----
+.
 At the top there are search and filter fields that work both separately and together.
 There is also an "Add Product" button that opens a pop-up window to add or edit a product.
----
+.
 After the search container comes the products container.
 Product container includes product cards.
----
+.
 The product card contains its picture, clicking on which the user goes to the page of this product, where there is a detailed description of it and an image slider.
 After the picture in the card is the name of the product, brand, price and a brief description.
 And at the very bottom of the card there is an action field with an *edit/delete* button (which is available only to the user who added this product), *add to cart* button and *buy button*.
@@ -41,7 +41,7 @@ And at the very bottom of the card there is an action field with an *edit/delete
 # Product Details Page
 
 The ***Product Details Page*** was written in Html and Scss, with using Bootstrap & Angular Material Components.
----
+.
 *Poduct Detail* has a same functionality as the *Products* page.
 There is all about product. There is also an action field, with the above buttons.
 
