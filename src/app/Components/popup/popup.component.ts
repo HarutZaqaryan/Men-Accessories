@@ -12,15 +12,18 @@ export class PopupComponent implements OnInit {
 
   popUpForm: FormGroup = new FormGroup({
     id: new FormControl(this.data?.id ?? null),
-    title: new FormControl(this.data?.title ?? '', Validators.required),
+    title: new FormControl(this.data?.title ?? '', [
+      Validators.required,
+      Validators.minLength(5),
+    ]),
     price: new FormControl(this.data?.price ?? null, Validators.required),
     brand: new FormControl(this.data?.brand ?? '', Validators.required),
     category: new FormControl(this.data?.category ?? '', Validators.required),
-    description: new FormControl(
-      this.data?.description ?? '',
-      Validators.required
-    ),
-    image: new FormControl(this.data?.image ?? '', Validators.required),
+    description: new FormControl(this.data?.description ?? '', [
+      Validators.required,
+      Validators.minLength(10),
+    ]),
+    image: new FormControl(this.data?.image ?? ''),
   });
 
   isNewProduct: boolean = true;
@@ -72,6 +75,8 @@ export class PopupComponent implements OnInit {
       };
     }
     this.dialogRef.close(this.data);
+    console.log(this.popUpForm.controls['title'], 'title field');
+    console.log(this.popUpForm.controls['description'], 'description field');
   }
 
   // * File Upload Change
@@ -79,6 +84,22 @@ export class PopupComponent implements OnInit {
     for (let i = 0; i < event.target.files.length; i++) {
       let file = event.target.files[i];
       this.images.push(URL.createObjectURL(file));
+    }
+  }
+
+  getInputErrors(input: any): any {
+    if (input.hasError('required')) {
+      return 'The Field Is Required';
+    } else if (
+      input.hasError('minlength') &&
+      input.errors.minlength.requiredLength === 5
+    ) {
+      return 'The Title Field Most Contain Minimum 5 symbols';
+    } else if (
+      input.hasError('minlength') &&
+      input.errors.minlength.requiredLength === 10
+    ) {
+      return 'The Description Field Most Contain Minimum 10 symbols';
     }
   }
 

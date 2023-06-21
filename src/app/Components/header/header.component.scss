@@ -30,7 +30,7 @@ li {
   align-items: center;
 
   .logo {
-    margin-left: 20px;
+    margin-left: 50px;
     cursor: pointer;
   }
 
@@ -50,7 +50,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    // gap: 30px;
 
     li {
       padding: 30px 30px;
@@ -109,18 +109,23 @@ li {
   }
 }
 
+.navigated {
+  left: -100%;
+}
+
 // ! Media Requests
 
 @media (max-width: 768px) {
   .header {
+    .logo {
+      margin-left: 20px;
+    }
     .menu__btn {
       display: block;
     }
-
     .header__nav {
       display: none;
     }
-
     .header__nav-menu {
       position: fixed;
       left: -100%;

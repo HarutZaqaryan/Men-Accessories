@@ -1,16 +1,31 @@
 <div class="cart">
   <div class="container">
-
     <!-- ! Container sholud render, when cart is mpty -->
+    <!-- <div class="empty-cart" *ngIf="emptyCart">
+      <button class="btn btn-secondary products-btn">
+        <a routerLink="/products">Products</a>
+      </button>
+    </div> -->
     <div class="empty-cart" *ngIf="emptyCart">
       <!-- <img src="../../../assets/Cart/empty_cart.png" alt="Empty Cart" /> -->
+      <img src="../../../assets/Images/empty_cart.png" alt="Empty Cart">
       <button class="btn btn-secondary products-btn">
         <a routerLink="/products">Products</a>
       </button>
     </div>
 
+    <ng-container *ngIf="!isLoaded">
+      <mat-progress-spinner
+        class="progress-spinner"
+        [color]="color"
+        [mode]="mode"
+        [value]="_value"
+      >
+      </mat-progress-spinner>
+    </ng-container>
+
     <!-- !  Cart Container-->
-    <div class="cart__container" *ngIf="!emptyCart">
+    <div class="cart__container" *ngIf="!emptyCart && isLoaded">
       <!-- ! Search Field -->
       <div class="header">
         <mat-form-field>
@@ -48,6 +63,14 @@
                 alt="Image"
                 class="product-img"
                 [title]="row.title"
+                *ngIf="row.image"
+              />
+              <img
+                src="../../../assets/Images/image-not-found.png"
+                alt="Image"
+                class="product-img"
+                [title]="row.title"
+                *ngIf="!row.image"
               />
             </td>
           </ng-container>
@@ -159,7 +182,7 @@
                 <div class="configure">
                   <button
                     class="btn btn-danger delete-btn"
-                    (click)="deleteProductFromCart(row)"
+                    (click)="deleteProductFromCart(row,'delete')"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -197,10 +220,8 @@
           <!-- Row sholud render, when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td
-              class="mat-cell"
+              class="mat-cell no-data"
               colspan="4"
-              style="padding: 30px; color: #fff; font-size: 25px"
-              ;
             >
               No data matching the filter "{{ input.value }}"
             </td>
@@ -241,7 +262,7 @@
         class="paginator__container"
         [pageSizeOptions]="[5, 10, 25, 100]"
         aria-label="Select page of users"
-        [ngClass]="{ none: emptyCart }"
+        [ngClass]="{'none': emptyCart, 'none2':!isLoaded}"
       >
       </mat-paginator>
     </div>

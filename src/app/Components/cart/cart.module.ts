@@ -4,7 +4,7 @@ import { CartComponent } from './cart.component';
 import { CartRoutingModule } from './cart-routing.module';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/Shared/material.module';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [CartComponent],

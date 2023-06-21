@@ -1,5 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
@@ -12,7 +19,8 @@ import { CartService } from 'src/app/Services/cart.service';
   styleUrls: ['./cart.component.scss'],
 })
 export class CartComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = [
+  private cartSubscription: Subscription;
+  public displayedColumns: string[] = [
     'image',
     'name',
     'price',
@@ -22,20 +30,38 @@ export class CartComponent implements OnInit, OnDestroy {
     'actions',
     'total-price',
   ];
-  dataSource: MatTableDataSource<IProducts>;
-  cartSubscription: Subscription;
-  cart: IProducts[] = [];
-  emptyCart: boolean = true;
-  totalPrice: number = 0;
+  public dataSource: MatTableDataSource<IProducts>;
+  public cart: IProducts[] = [];
+  public emptyCart: boolean = false;
+  public totalPrice: number = 0;
+  public isLoaded: boolean = false;
+  public color: ThemePalette = 'primary';
+  public mode: ProgressSpinnerMode = 'indeterminate';
+  public _value = 50;
+  public horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  public verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    public _snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.getCartProducts();
     this.getTotalPrice();
+  }
+
+  // * Show Notification(snackar)
+  openSnackBar(message: string, action?: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: ['mat-warn'],
+    });
   }
 
   // * Get Products From Cart
@@ -46,14 +72,17 @@ export class CartComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.cart = res;
         this.dataSource = new MatTableDataSource(res);
-        if (this.cart.length > 0) {
-          this.emptyCart = false;
-        } else {
-          this.emptyCart = true;
-        }
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.getTotalPrice();
+        setTimeout(() => {
+          this.isLoaded = true;
+          if (this.cart.length > 0 && this.isLoaded) {
+            this.emptyCart = false;
+          } else {
+            this.emptyCart = true;
+          }
+        }, 2000);
       });
   }
 
@@ -61,10 +90,9 @@ export class CartComponent implements OnInit, OnDestroy {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    // if (this.dataSource.paginator) {
+    //   this.dataSource.paginator.firstPage();
+    // }
   }
 
   // * Decrement product quantity
@@ -92,7 +120,7 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // * Delete Product From Cart
-  deleteProductFromCart(product: IProducts) {
+  deleteProductFromCart(product: IProducts, action?: string) {
     this.totalPrice = 0;
     this.cartService.deleteProductFromCart(product.id).subscribe((data) => {
       this.cart = this.cart.filter((item) => item.id !== product.id);
@@ -102,14 +130,20 @@ export class CartComponent implements OnInit, OnDestroy {
         this.emptyCart = true;
       }
       this.getTotalPrice();
-      console.log('product has been deleted from cart');
+
+      if (action === 'buy') {
+        this.openSnackBar(`${product.title} Has Been Buyed From Cart`);
+      }
+
+      if (action === 'delete') {
+        this.openSnackBar(`${product.title} Has Been Deleted From Cart`);
+      }
     });
   }
 
   // * Buy Product From Cart
   buyProductFromCart(product: IProducts) {
-    console.log(`${product.title} has been buyed from cart`);
-    this.deleteProductFromCart(product);
+    this.deleteProductFromCart(product, 'buy');
   }
 
   // * Get Total Price
@@ -125,6 +159,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cart = [];
     this.dataSource = new MatTableDataSource(this.cart);
     this.emptyCart = true;
+    this.openSnackBar('All Products Has Been Deleted From Cart');
 
     // ! return this.http.delete('http://localhost:3000/cart')
     // this.cartService.deleteAllProductsFromCart().subscribe((data) => {
@@ -148,7 +183,9 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // * Buy All Products From Cart
-  buyAllProducts() {}
+  buyAllProducts() {
+    this.openSnackBar('All Products Has Been Buyed From Cart');
+  }
 
   // * Destroy
   ngOnDestroy(): void {

@@ -1,5 +1,5 @@
 <div class="header">
-  <div class="logo">
+  <div class="logo" routerLink="/home">
     <svg
       width="102"
       height="26"
@@ -23,14 +23,20 @@
         >menu</mat-icon
       >
     </label>
-    <div class="header__nav-menu">
+    <div class="header__nav-menu" [ngClass]="{ navigated: isNavigated }">
       <ul>
-        <li><a routerLink="/">Home</a></li>
+        <li>
+          <a routerLink="/" class="header__nav-menu-item" (click)="onNavigate()"
+            >Home</a
+          >
+        </li>
         <li>
           <a
             routerLink="/products"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            class="header__nav-menu-item"
+            (click)="onNavigate()"
             >Products</a
           >
         </li>
@@ -39,11 +45,12 @@
             routerLink="/cart"
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
+            class="header__nav-menu-item"
+            (click)="onNavigate()"
           >
             <mat-icon>shopping_cart</mat-icon>
           </a>
-        <span class="cart_item-count-menu">{{cartItemCount}}</span>
-
+          <span class="cart_item-count-menu">{{ cartItemCount }}</span>
         </li>
       </ul>
     </div>
@@ -69,7 +76,7 @@
         >
           <mat-icon>shopping_cart</mat-icon>
         </a>
-        <span class="cart_item-count">{{cartItemCount}}</span>
+        <span class="cart_item-count">{{ cartItemCount }}</span>
       </li>
     </ul>
   </div>

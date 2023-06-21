@@ -74,7 +74,7 @@
 .product__detail-img {
   width: 410px;
   height: 550px;
-  margin: 0 auto;
+  margin: 30px auto;
 }
 
 .product__info {
@@ -83,9 +83,11 @@
   width: 50%;
   padding-left: 40px;
   padding-bottom: 20px;
+
   hr {
     margin-bottom: 40px;
   }
+  
   p {
     letter-spacing: 0.5px;
     margin-bottom: 20px;

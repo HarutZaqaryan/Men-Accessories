@@ -35,6 +35,7 @@
 
 .btn-to_top {
   border-radius: 10px;
+  border: none;
 }
 
 .products__container {
@@ -125,6 +126,10 @@
   display: flex;
   justify-content: space-between;
   gap: 10px;
+
+  button, a {
+    height: 40px;
+  }
 }
 
 .no_data-text {
@@ -136,6 +141,12 @@
 
 .green-snackbar {
   background-color: green;
+}
+
+.progress-spinner {
+  width: 130px;
+  height: 130px;
+  margin: 100px auto;
 }
 
 // ! Media Requests
@@ -311,6 +322,7 @@
 
   .product__card {
     max-width: 250px;
+
     img {
       height: 250px;
     }
@@ -348,6 +360,7 @@
 
   .product__card {
     max-width: 230px;
+
     img {
       height: 240px;
     }
@@ -432,6 +445,7 @@
     margin-top: 5px;
     margin-bottom: 35px;
     position: relative;
+    
     &::after {
       content: "";
       border: 2px solid #fff;

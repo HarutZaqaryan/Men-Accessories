@@ -12,7 +12,13 @@ import { IProducts } from 'src/app/Models/IProducts';
 import { ProductsService } from 'src/app/Services/products.service';
 import { PopupComponent } from '../popup/popup.component';
 import { CartService } from 'src/app/Services/cart.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-products',
@@ -20,16 +26,22 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit, OnDestroy {
+  private productSubscription?: Subscription;
+  private cartSubscription: Subscription;
   public windowScrolled: boolean = false;
   public value: string = 'Search';
   public products: IProducts[] = [];
   public products_reserve: IProducts[] = [];
-  private productSubscription?: Subscription;
+  public cart: IProducts[] = [];
   public searchInputValue: string = '';
   public filterValue: string = '';
   public noData: boolean = false;
-  public cart: IProducts[] = [];
-  private cartSubscription: Subscription;
+  public isLoaded: boolean = false;
+  public color: ThemePalette = 'primary';
+  public mode: ProgressSpinnerMode = 'indeterminate';
+  public _value = 50;
+  public horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  public verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -48,10 +60,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
   openSnackBar(message: string, action?: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
       panelClass: ['mat-warn'],
     });
   }
-
 
   // * Listener For Window(scroll)
   @HostListener('window:scroll', [])
@@ -79,13 +92,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   // * Get All Products
   getAllProducts() {
-    this.productSubscription = this.productService
-      .getAllProducts()
-      .subscribe((res) => {
-        this.products = res;
-        this.products.reverse();
-        this.products_reserve = res;
-      });
+    setTimeout(() => {
+      this.productSubscription = this.productService
+        .getAllProducts()
+        .subscribe((res) => {
+          this.products = res;
+          this.products.reverse();
+          this.products_reserve = res;
+          this.isLoaded = true;
+        });
+    }, 1000);
   }
 
   // * Search for products
@@ -151,8 +167,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   // * Add New Product
   addNewProduct(product: IProducts) {
     this.productService.addNewProduct(product).subscribe((data) => {
-      this.products.push(data);
-      this.products.reverse();
+      this.products.unshift(data);
+      this.openSnackBar('New Product Has Been Added');
     });
   }
 
@@ -166,14 +182,21 @@ export class ProductsComponent implements OnInit, OnDestroy {
           return product;
         }
       });
+      this.openSnackBar('Product Has Been Edited');
     });
+
+    if (this.cart.length > 0) {
+      this.cartService.updateInCart(product).subscribe((data) => {});
+    }
   }
 
   // * Delete Product
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe((data) => {
       this.products = this.products.filter((product) => product.id !== id);
+      this.openSnackBar('Product Has Been Deleted');
     });
+    this.cartService.deleteProductFromCart(id).subscribe((data) => {});
   }
 
   // * Get Products From Cart
@@ -199,24 +222,29 @@ export class ProductsComponent implements OnInit, OnDestroy {
       } else {
         this.cartService.addToCart(product).subscribe((data) => {
           this.cart.push(data);
-          this.openSnackBar('Product added to cart');
+          this.openSnackBar('Product Added To Cart');
         });
       }
     } else {
       this.cartService.addToCart(product).subscribe((data) => {
         this.cart.push(data);
+        this.openSnackBar('Product Added To Cart');
       });
     }
   }
 
-  // * Update Product In Cart
+  // * Update Product Quantity In Cart
   updateInCart(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
     this.cartService.updateInCart(product).subscribe((data) => {});
   }
 
-  
+  // * Buy Product
+  buyProduct(product: IProducts) {
+    this.openSnackBar(`${product.title} Has Been Buyed`);
+  }
+
   ngOnDestroy(): void {
     if (this.productSubscription) {
       this.productSubscription.unsubscribe();

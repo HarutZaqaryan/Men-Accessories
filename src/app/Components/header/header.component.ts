@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { CartService } from 'src/app/Services/cart.service';
 
 @Component({
@@ -7,14 +8,21 @@ import { CartService } from 'src/app/Services/cart.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  cartItemCount:number = 0;
-
-  constructor(private cartService:CartService){}
+  public cartItemCount: number = 0;
+  public isNavigated: boolean = false;
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
-    this.cartService.getCartList().subscribe(res => {
-      this.cartItemCount = res.length
-      console.log(res.length);
-    })
+    this.cartService.getCartList().subscribe((res) => {
+      this.cartItemCount = res.length;
+    });
+  }
+
+  onNavigate() {
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        this.isNavigated = true;
+      }
+    });
   }
 }

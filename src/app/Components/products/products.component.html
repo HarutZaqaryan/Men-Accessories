@@ -3,7 +3,7 @@
     <!-- ! Button To Top -->
     <div class="to-top" [ngClass]="{ 'show-to_top': windowScrolled }">
       <button class="btn-to_top" (click)="scrollToTop()">
-        <mat-icon>arrow_upward</mat-icon>
+        <mat-icon style="width: 25px">arrow_upward</mat-icon>
       </button>
     </div>
 
@@ -20,7 +20,7 @@
             matSuffix
             mat-icon-button
             aria-label="Clear"
-            (click)="value = ''"
+            (click)="searchInput.value = ''"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -50,8 +50,20 @@
           Add New Product
         </button>
       </div>
+
+      <!-- ! Progress Spinner -->
+      <ng-container *ngIf="!isLoaded">
+        <mat-progress-spinner
+          class="progress-spinner examle-margin"
+          [color]="color"
+          [mode]="mode"
+          [value]="_value"
+        >
+        </mat-progress-spinner>
+      </ng-container>
+
       <!-- ! Products List -->
-      <div class="products__content" *ngIf="!noData">
+      <div class="products__content" *ngIf="!noData && isLoaded">
         <div class="card product__card" *ngFor="let product of products">
           <img
             [src]="product.image"
@@ -102,7 +114,7 @@
                 (click)="addToCart(product)"
                 >Add To Cart</a
               >
-              <a href="#" class="btn btn-success">Buy</a>
+              <a href="#" class="btn btn-success" (click)="buyProduct(product)">Buy</a>
             </div>
           </div>
         </div>
