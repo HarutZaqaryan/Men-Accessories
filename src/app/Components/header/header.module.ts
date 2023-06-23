@@ -9,4 +9,5 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, MatIconModule, RouterModule],
   exports: [HeaderComponent],
 })
+
 export class HeaderModule {}

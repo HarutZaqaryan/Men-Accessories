@@ -29,4 +29,5 @@ export class ProductResolver implements Resolve<IProducts> {
         })
       )
   }
+  
 }

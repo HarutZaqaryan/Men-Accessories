@@ -12,8 +12,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     RouterModule,
     FormsModule,
-    ProductsRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ProductsRoutingModule
   ],
   exports: [ProductsComponent],
 })

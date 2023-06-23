@@ -17,4 +17,5 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   ],
   exports: [CartComponent],
 })
+
 export class CartModule {}

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -40,6 +40,7 @@ export class CartComponent implements OnInit, OnDestroy {
   public _value = 50;
   public horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   public verticalPosition: MatSnackBarVerticalPosition = 'top';
+  public hasServerError: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -67,9 +68,8 @@ export class CartComponent implements OnInit, OnDestroy {
   // * Get Products From Cart
   getCartProducts(): void {
     this.totalPrice = 0;
-    this.cartSubscription = this.cartService
-      .getCartProducts()
-      .subscribe((res) => {
+    this.cartSubscription = this.cartService.getCartProducts().subscribe(
+      (res) => {
         this.cart = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.paginator = this.paginator;
@@ -83,16 +83,21 @@ export class CartComponent implements OnInit, OnDestroy {
             this.emptyCart = true;
           }
         }, 2000);
-      });
+      },
+      (err) => {
+        this.hasServerError = true;
+        console.log(err);
+      }
+    );
   }
 
   // * Filter Products
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    // if (this.dataSource.paginator) {
-    //   this.dataSource.paginator.firstPage();
-    // }
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   // * Decrement product quantity
@@ -102,9 +107,14 @@ export class CartComponent implements OnInit, OnDestroy {
     } else {
       product.quantity! -= 1;
       product.totalPrice! = product.quantity! * product.price;
-      this.cartService.updateInCart(product).subscribe((data) => {
-        console.log('Product quantity has been updated in cart');
-      });
+      this.cartService.updateInCart(product).subscribe(
+        (data) => {
+          console.log('Product quantity has been updated in cart');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
       this.getTotalPrice();
     }
   }
@@ -113,32 +123,48 @@ export class CartComponent implements OnInit, OnDestroy {
   incrementQuantity(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
-    this.cartService.updateInCart(product).subscribe((data) => {
-      console.log('Product quantity has been updated in cart');
-    });
+    this.cartService.updateInCart(product).subscribe(
+      (data) => {
+        console.log('Product quantity has been updated in cart');
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     this.getTotalPrice();
   }
 
   // * Delete Product From Cart
   deleteProductFromCart(product: IProducts, action?: string) {
     this.totalPrice = 0;
-    this.cartService.deleteProductFromCart(product.id).subscribe((data) => {
-      this.cart = this.cart.filter((item) => item.id !== product.id);
-      this.dataSource = new MatTableDataSource(this.cart);
-      this.dataSource.paginator = this.paginator;
-      if (this.cart.length === 0) {
-        this.emptyCart = true;
-      }
-      this.getTotalPrice();
+    this.cartService.deleteProductFromCart(product.id).subscribe(
+      (data) => {
+        this.cart = this.cart.filter((item) => item.id !== product.id);
+        this.dataSource = new MatTableDataSource(this.cart);
+        this.dataSource.paginator = this.paginator;
+        if (this.cart.length === 0) {
+          this.emptyCart = true;
+        }
+        this.getTotalPrice();
 
-      if (action === 'buy') {
-        this.openSnackBar(`${product.title} Has Been Buyed From Cart`);
-      }
+        if (action === 'buy') {
+          this.openSnackBar(`${product.title} Has been buyed from cart`);
+        }
 
-      if (action === 'delete') {
-        this.openSnackBar(`${product.title} Has Been Deleted From Cart`);
+        if (action === 'delete') {
+          this.openSnackBar(`${product.title} Has been deleted from cart`);
+        }
+      },
+      (err) => {
+        console.log(err);
+        if (action === 'buy') {
+          this.openSnackBar('BUYING IS FAILED. Something iswrong');
+        }
+        if (action === 'delete') {
+          this.openSnackBar('DELETING IS FAILED. Something iswrong');
+        }
       }
-    });
+    );
   }
 
   // * Buy Product From Cart
@@ -155,11 +181,11 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   // * Delete All Products From Cart
-  cleanCart() {
+  deleteAllProducts() {
     this.cart = [];
     this.dataSource = new MatTableDataSource(this.cart);
     this.emptyCart = true;
-    this.openSnackBar('All Products Has Been Deleted From Cart');
+    this.openSnackBar('All products has been deleted from cart');
 
     // ! return this.http.delete('http://localhost:3000/cart')
     // this.cartService.deleteAllProductsFromCart().subscribe((data) => {

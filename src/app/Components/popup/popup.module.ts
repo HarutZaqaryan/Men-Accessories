@@ -9,8 +9,8 @@ import { PopupComponent } from './popup.component';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   exports: [PopupComponent],
 })

@@ -20,8 +20,8 @@ import { PopupModule } from './Components/popup/popup.module';
     AppRoutingModule,
     HttpClientModule,
     HeaderModule,
-    HomeModule,
-    PopupModule
+    PopupModule,
+    HomeModule
   ],
   providers: [],
   bootstrap: [AppComponent],

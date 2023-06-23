@@ -13,4 +13,5 @@ describe('ProductResolver', () => {
   it('should be created', () => {
     expect(resolver).toBeTruthy();
   });
+  
 });

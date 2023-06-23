@@ -34,6 +34,7 @@ const routes: Routes = [
     redirectTo: 'home',
   },
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

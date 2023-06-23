@@ -9,8 +9,8 @@ import { MaterialModule } from 'src/app/Shared/material.module';
   imports: [
     CommonModule,
     RouterModule,
-    ProductDetailRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ProductDetailRoutingModule
   ],
   exports: [ProductDetailsComponent],
 })

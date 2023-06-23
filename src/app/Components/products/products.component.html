@@ -10,7 +10,7 @@
     <!-- ! Products Container -->
     <div class="products__container">
       <!-- ! Search & Add Container -->
-      <div class="products__search">
+      <div class="products__search" *ngIf="!hasServerError">
         <mat-form-field class="example-form-field search-field">
           <mat-label>Search For Product</mat-label>
           <input matInput type="text" placeholder="Search" #searchInput />
@@ -52,7 +52,7 @@
       </div>
 
       <!-- ! Progress Spinner -->
-      <ng-container *ngIf="!isLoaded">
+      <ng-container *ngIf="!isLoaded && !hasServerError">
         <mat-progress-spinner
           class="progress-spinner examle-margin"
           [color]="color"
@@ -61,6 +61,13 @@
         >
         </mat-progress-spinner>
       </ng-container>
+
+      <ng-container *ngIf="hasServerError">
+        <div class="not-found">
+          <p class="no_found-text">404   Not Found</p>
+        </div>
+      </ng-container>
+      
 
       <!-- ! Products List -->
       <div class="products__content" *ngIf="!noData && isLoaded">
@@ -114,7 +121,7 @@
                 (click)="addToCart(product)"
                 >Add To Cart</a
               >
-              <a href="#" class="btn btn-success" (click)="buyProduct(product)">Buy</a>
+              <a class="btn btn-success" (click)="buyProduct(product)">Buy</a>
             </div>
           </div>
         </div>

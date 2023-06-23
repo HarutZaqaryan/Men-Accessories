@@ -42,6 +42,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   public _value = 50;
   public horizontalPosition: MatSnackBarHorizontalPosition = 'start';
   public verticalPosition: MatSnackBarVerticalPosition = 'top';
+  public hasServerError: boolean = false;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -93,14 +94,18 @@ export class ProductsComponent implements OnInit, OnDestroy {
   // * Get All Products
   getAllProducts() {
     setTimeout(() => {
-      this.productSubscription = this.productService
-        .getAllProducts()
-        .subscribe((res) => {
+      this.productSubscription = this.productService.getAllProducts().subscribe(
+        (res) => {
           this.products = res;
           this.products.reverse();
           this.products_reserve = res;
           this.isLoaded = true;
-        });
+        },
+        (err) => {
+          this.hasServerError = true;
+          console.log('HTTP Error', err);
+        }
+      );
     }, 1000);
   }
 
@@ -115,7 +120,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
           .trim()
           .toLowerCase()
           .includes(searchInput.value.trim().toLowerCase())
-      );
+      ).reverse();
     }
 
     // When searching with category
@@ -123,7 +128,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       this.products = this.products.filter(
         (item) =>
           item.category.toLowerCase() === filterInput.value.toLowerCase()
-      );
+      ).reverse();
     }
 
     // When searching & filtering together
@@ -135,7 +140,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
             .toLowerCase()
             .includes(searchInput.value.trim().toLowerCase()) &&
           item.category.toLowerCase() === filterInput.value.toLowerCase()
-      );
+      ).reverse();
+    }
+
+    if(searchInput.value === '' && !filterInput.value) {
+      this.products = this.products_reserve.reverse();
+      console.log('reserve reverse');
     }
 
     if (this.products.length < 1) {
@@ -166,24 +176,36 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   // * Add New Product
   addNewProduct(product: IProducts) {
-    this.productService.addNewProduct(product).subscribe((data) => {
-      this.products.unshift(data);
-      this.openSnackBar('New Product Has Been Added');
-    });
+    this.productService.addNewProduct(product).subscribe(
+      (data) => {
+        this.products.unshift(data);
+        this.openSnackBar('New Product has been added');
+      },
+      (err) => {
+        console.log(err);
+        this.openSnackBar('ADDING PRODUCT IS FAILED. Something is wrong');
+      }
+    );
   }
 
   // * Edit Product
   editProduct(product: IProducts) {
-    this.productService.editProduct(product).subscribe((data) => {
-      this.products = this.products.map((product) => {
-        if (product.id === data.id) {
-          return data;
-        } else {
-          return product;
-        }
-      });
-      this.openSnackBar('Product Has Been Edited');
-    });
+    this.productService.editProduct(product).subscribe(
+      (data) => {
+        this.products = this.products.map((product) => {
+          if (product.id === data.id) {
+            return data;
+          } else {
+            return product;
+          }
+        });
+        this.openSnackBar('Product has been edited');
+      },
+      (err) => {
+        console.log(err);
+        this.openSnackBar('PRODUCT NOT EDITED. Something is wrong');
+      }
+    );
 
     if (this.cart.length > 0) {
       this.cartService.updateInCart(product).subscribe((data) => {});
@@ -192,20 +214,28 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   // * Delete Product
   deleteProduct(id: number) {
-    this.productService.deleteProduct(id).subscribe((data) => {
-      this.products = this.products.filter((product) => product.id !== id);
-      this.openSnackBar('Product Has Been Deleted');
-    });
+    this.productService.deleteProduct(id).subscribe(
+      (data) => {
+        this.products = this.products.filter((product) => product.id !== id);
+        this.openSnackBar('Product has been deleted');
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     this.cartService.deleteProductFromCart(id).subscribe((data) => {});
   }
 
   // * Get Products From Cart
   getCartProducts() {
-    this.cartSubscription = this.cartService
-      .getCartProducts()
-      .subscribe((data) => {
+    this.cartSubscription = this.cartService.getCartProducts().subscribe(
+      (data) => {
         this.cart = data;
-      });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Add Product To Cart
@@ -219,17 +249,30 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
       if (foundItem) {
         this.updateInCart(foundItem);
+        this.openSnackBar('This product is already in your cart, its quantity has been increased');
       } else {
-        this.cartService.addToCart(product).subscribe((data) => {
-          this.cart.push(data);
-          this.openSnackBar('Product Added To Cart');
-        });
+        this.cartService.addToCart(product).subscribe(
+          (data) => {
+            this.cart.push(data);
+            this.openSnackBar('Product added to your cart');
+          },
+          (err) => {
+            console.log(err);
+            this.openSnackBar('ADDING TO CART FAILED, Something is wrong');
+          }
+        );
       }
     } else {
-      this.cartService.addToCart(product).subscribe((data) => {
-        this.cart.push(data);
-        this.openSnackBar('Product Added To Cart');
-      });
+      this.cartService.addToCart(product).subscribe(
+        (data) => {
+          this.cart.push(data);
+          this.openSnackBar('Product added to cart');
+        },
+        (err) => {
+          console.log(err);
+          this.openSnackBar('ADDING TO CART FAILED, Something is wrong');
+        }
+      );
     }
   }
 
@@ -237,12 +280,17 @@ export class ProductsComponent implements OnInit, OnDestroy {
   updateInCart(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
-    this.cartService.updateInCart(product).subscribe((data) => {});
+    this.cartService.updateInCart(product).subscribe(
+      (data) => {},
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Buy Product
   buyProduct(product: IProducts) {
-    this.openSnackBar(`${product.title} Has Been Buyed`);
+    this.openSnackBar(`${product.title} Has been buyed`);
   }
 
   ngOnDestroy(): void {

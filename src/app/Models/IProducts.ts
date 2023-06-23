@@ -10,5 +10,5 @@ export interface IProducts {
   description: string;
   disableEdit: boolean;
   quantity?:number;
-  totalPrice?:number
+  totalPrice?:number;
 }

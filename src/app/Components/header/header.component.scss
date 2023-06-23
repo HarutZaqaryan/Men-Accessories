@@ -109,11 +109,6 @@ li {
   }
 }
 
-.navigated {
-  left: -100%;
-}
-
-
 // ! Media Requests
 
 @media (max-width: 768px) {
@@ -164,6 +159,11 @@ li {
       left: 0;
     }
   }
+
+  .navigated {
+    left: -100% !important;
+  }
+  
 }
 
 @media (max-width: 330px) {

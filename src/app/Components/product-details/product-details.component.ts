@@ -29,6 +29,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   public timeoutId?: number;
   public verticalPosition: MatSnackBarVerticalPosition = 'top';
   public horizontalPosition: MatSnackBarHorizontalPosition = 'start';
+  public hasServerError: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -65,47 +66,58 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this._snackBar.open(message, action, {
       duration: 2000,
       horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition
+      verticalPosition: this.verticalPosition,
     });
   }
 
   // * Get All Products
   getAllProducts() {
-    this.productSubscription = this.productService
-      .getAllProducts()
-      .subscribe((res) => {
+    this.productSubscription = this.productService.getAllProducts().subscribe(
+      (res) => {
         this.products = res;
-      });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Get Individual Product With ID
   getProductDetail() {
-    this.productSubscription = this.route.data.subscribe((res) => {
-      this.product = res['data'];
-      this.images = [
-        {
-          url:
-            this.product?.image_detail_1 ??
-            '../../../assets/Images/image-not-found.png',
-          title: 'detail-1',
-        },
-        {
-          url:
-            this.product?.image_detail_2 ??
-            '../../../assets/Images/image-not-found.png',
-          title: 'detail-2',
-        },
-      ];
-    });
+    this.productSubscription = this.route.data.subscribe(
+      (res) => {
+        this.product = res['data'];
+        this.images = [
+          {
+            url:
+              this.product?.image_detail_1 ??
+              '../../../assets/Images/image-not-found.png',
+            title: 'detail-1',
+          },
+          {
+            url:
+              this.product?.image_detail_2 ??
+              '../../../assets/Images/image-not-found.png',
+            title: 'detail-2',
+          },
+        ];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Get Products From Cart
   getCartProducts() {
-    this.cartSubscription = this.cartService
-      .getCartProducts()
-      .subscribe((data) => {
+    this.cartSubscription = this.cartService.getCartProducts().subscribe(
+      (data) => {
         this.cart = data;
-      });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Reset Timer (Gallery)
@@ -158,35 +170,61 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
       if (foundItem) {
         this.updateInCart(foundItem);
+        this.openSnackBar(
+          'This product is already in your cart, its quantity has been increased'
+        );
       } else {
-        this.cartService.addToCart(product).subscribe((data) => {
-          this.cart.push(data);
-          this.openSnackBar('Product Added To Cart');
-        });
+        this.cartService.addToCart(product).subscribe(
+          (data) => {
+            this.cart.push(data);
+            this.openSnackBar('Product added to cart');
+          },
+          (err) => {
+            console.log(err);
+            this.openSnackBar('ADDING TO CART FAILED. Something is wrong');
+          }
+        );
       }
     } else {
-      this.cartService.addToCart(product).subscribe((data) => {
-        this.cart.push(data);
-        this.openSnackBar('Product Added To Cart');
-      });
+      this.cartService.addToCart(product).subscribe(
+        (data) => {
+          this.cart.push(data);
+          this.openSnackBar('Product added to cart');
+        },
+        (err) => {
+          console.log(err);
+          this.openSnackBar('ADDING TO CART FAILED. Something is wrong');
+        }
+      );
     }
   }
 
   // * Edit Product
   editProduct(product: IProducts) {
-    this.productService.editProduct(product).subscribe((data) => {
-      this.products = this.products.map((product) => {
-        if (product.id === data.id) {
-          return data;
-        } else {
-          return product;
-        }
-      });
-      this.product = data;
-      this.openSnackBar('Product Has Been Edited');
-    });
+    this.productService.editProduct(product).subscribe(
+      (data) => {
+        this.products = this.products.map((product) => {
+          if (product.id === data.id) {
+            return data;
+          } else {
+            return product;
+          }
+        });
+        this.product = data;
+        this.openSnackBar('Product has been edited');
+      },
+      (err) => {
+        this.openSnackBar('EDITING PRODUCT IS FAILED. Something is wrong');
+      }
+    );
     if (this.cart.length > 0) {
-      this.cartService.updateInCart(product).subscribe((data) => {});
+      this.cartService.updateInCart(product).subscribe(
+        (data) => {},
+        (err) => {
+          console.log(err);
+          this.openSnackBar('EDITING PRODUCT IS FAILED. Something is wrong');
+        }
+      );
     }
   }
 
@@ -194,7 +232,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   updateInCart(product: IProducts) {
     product.quantity! += 1;
     product.totalPrice! = product.quantity! * product.price;
-    this.cartService.updateInCart(product).subscribe((data) => {});
+    this.cartService.updateInCart(product).subscribe(
+      (data) => {},
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   // * Delete Product
@@ -202,14 +245,20 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.productService.deleteProduct(id).subscribe((data) => {
       this.products = this.products.filter((product) => product.id !== id);
       this.router.navigate(['/', 'products']);
-      this.openSnackBar('Product Has Been Deleted');
+      this.openSnackBar('Product has been deleted');
     });
-    this.cartService.deleteProductFromCart(id).subscribe((data) => {});
+    this.cartService.deleteProductFromCart(id).subscribe(
+      (data) => {},
+      (err) => {
+        console.log(err);
+        this.openSnackBar('DELETING PRODUCT IS FAILED. Something is wrong');
+      }
+    );
   }
 
   // * Buy Product
   buyProduct(product: IProducts) {
-    this.openSnackBar(`${product.title} Has Been Buyed`);
+    this.openSnackBar(`${product.title} Has been buyed`);
   }
 
   ngOnDestroy(): void {

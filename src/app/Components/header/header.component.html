@@ -16,17 +16,17 @@
 
   <!-- * Responsive Menu -->
   <div class="menu__btn">
-    <input type="checkbox" id="check" />
+    <input type="checkbox" id="check" #menuCheckBox/>
     <label for="check" class="menu">
       <mat-icon
-        style="width: 50px; height: 55px; font-size: 47px; margin-top: 5px"
+        style="width: 50px; height: 55px; font-size: 47px; margin-top: 10px"
         >menu</mat-icon
       >
     </label>
-    <div class="header__nav-menu" [ngClass]="{ navigated: isNavigated }">
+    <div class="header__nav-menu" [ngClass]="{ 'navigated': isNavigated }">
       <ul>
         <li>
-          <a routerLink="/" class="header__nav-menu-item" (click)="onNavigate()"
+          <a routerLink="/" class="header__nav-menu-item" (click)="onNavigate(menuCheckBox)"
             >Home</a
           >
         </li>
@@ -36,7 +36,7 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             class="header__nav-menu-item"
-            (click)="onNavigate()"
+            (click)="onNavigate(menuCheckBox)"
             >Products</a
           >
         </li>
@@ -46,7 +46,7 @@
             routerLinkActive="active"
             ariaCurrentWhenActive="page"
             class="header__nav-menu-item"
-            (click)="onNavigate()"
+            (click)="onNavigate(menuCheckBox)"
           >
             <mat-icon>shopping_cart</mat-icon>
           </a>

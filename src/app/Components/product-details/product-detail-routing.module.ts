@@ -4,7 +4,6 @@ import { ProductDetailsComponent } from './product-details.component';
 
 const routes: Routes = [
   { path: '', component:ProductDetailsComponent},
-  
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

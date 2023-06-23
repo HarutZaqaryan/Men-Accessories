@@ -4,14 +4,6 @@
   box-sizing: border-box;
 }
 
-.none {
-  display: none;
-}
-
-.none2 {
-  display: none;
-}
-
 .cart {
   background-color: #191b1c;
   margin-top: 80px;
@@ -170,6 +162,18 @@ mat-form-field {
   }
 }
 
+.none {
+  display: none;
+}
+
+.none2 {
+  display: none;
+}
+
+.none3 {
+  display: none;
+}
+
 .general-actions {
   background-color: #424242;
   height: 90px;
@@ -215,6 +219,20 @@ mat-form-field {
   padding: 12px;
   font-size: 20px;
   color: #fff;
+}
+
+.not-found {
+  width: 100%;
+  height: 80px;
+  text-align: center;
+  margin-top: 30px;
+  p {
+    font-size: 25px;
+    color: red;
+    margin-top: 30px;
+    letter-spacing: 3px;
+    font-weight: 700;
+  }
 }
 
 // ! Media Requests

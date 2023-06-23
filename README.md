@@ -35,7 +35,7 @@ After the search container comes the products container.
 Product container includes product cards.
 .
 The product card contains its picture, clicking on which the user goes to the page of this product, where there is a detailed description of it and an image slider.
-After the picture in the card is the name of the product, brand, price and a brief description.
+After the picture in the card is the name of the product, brand, price and a brief description
 And at the very bottom of the card there is an action field with an *edit/delete* button (which is available only to the user who added this product), *add to cart* button and *buy button*.
 
 # Product Details Page

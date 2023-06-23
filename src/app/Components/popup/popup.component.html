@@ -10,13 +10,17 @@
     <mat-form-field class="example-full-width p_name-field">
       <mat-label>Product Name</mat-label>
       <input matInput placeholder="Name" formControlName="title" />
-      <mat-error *ngIf="popUpForm.controls['title'].invalid">{{getInputErrors(popUpForm.controls['title'])}}</mat-error>
+      <mat-error *ngIf="popUpForm.controls['title'].invalid">{{
+        getInputErrors(popUpForm.controls["title"])
+      }}</mat-error>
     </mat-form-field>
     <!-- Brnad Field -->
     <mat-form-field class="example-full-width p_name-field p_brand-field">
       <mat-label>Product Brand</mat-label>
       <input matInput placeholder="Brand" formControlName="brand" />
-      <mat-error *ngIf="popUpForm.controls['brand'].invalid">{{getInputErrors(popUpForm.controls['brand'])}}</mat-error>
+      <mat-error *ngIf="popUpForm.controls['brand'].invalid">{{
+        getInputErrors(popUpForm.controls["brand"])
+      }}</mat-error>
     </mat-form-field>
     <!-- Price Field -->
     <mat-form-field class="example-full-width p_name-field">
@@ -27,7 +31,9 @@
         type="number"
         formControlName="price"
       />
-      <mat-error *ngIf="popUpForm.controls['price'].invalid">{{getInputErrors(popUpForm.controls['price'])}}</mat-error>
+      <mat-error *ngIf="popUpForm.controls['price'].invalid">{{
+        getInputErrors(popUpForm.controls["price"])
+      }}</mat-error>
     </mat-form-field>
     <!-- Category Field -->
     <mat-form-field class="filter-field category-field">
@@ -38,8 +44,11 @@
         <mat-option value="Belt">Belt</mat-option>
         <mat-option value="SunGlass">SunGlass</mat-option>
       </mat-select>
-      <mat-error *ngIf="popUpForm.controls['category'].invalid">{{getInputErrors(popUpForm.controls['category'])}}</mat-error>
+      <mat-error *ngIf="popUpForm.controls['category'].invalid">{{
+        getInputErrors(popUpForm.controls["category"])
+      }}</mat-error>
     </mat-form-field>
+
     <!-- Image Field -->
     <mat-form-field class="file-field">
       <mat-label>Product Image</mat-label>
@@ -52,11 +61,20 @@
       >
         <mat-icon>attach_file</mat-icon>
       </button>
-      <input type="text" readonly matInput />
-      <input type="file" multiple hidden #f_input formControlName="image" (change)="fileInputChange($event)"/>
-      <mat-error *ngIf="popUpForm.controls['image'].invalid">{{getInputErrors(popUpForm.controls['image'])}}</mat-error>
-
+      <input type="text" readonly matInput #product_image_name />
+      <input
+        type="file"
+        multiple
+        hidden
+        #f_input
+        formControlName="image"
+        (change)="fileInputChange($event,product_image_name)"
+      />
+      <mat-error *ngIf="popUpForm.controls['image'].invalid">{{
+        getInputErrors(popUpForm.controls["image"])
+      }}</mat-error>
     </mat-form-field>
+
     <!-- Description Field -->
     <mat-form-field class="example-full-width p_name-field">
       <mat-label>Product Description</mat-label>
@@ -65,12 +83,19 @@
         placeholder="Description"
         formControlName="description"
       ></textarea>
-      <mat-error *ngIf="popUpForm.controls['description'].invalid">{{getInputErrors(popUpForm.controls['description'])}}</mat-error>
-
+      <mat-error *ngIf="popUpForm.controls['description'].invalid">{{
+        getInputErrors(popUpForm.controls["description"])
+      }}</mat-error>
     </mat-form-field>
     <!-- ! Pop UP Actions -->
     <mat-dialog-actions>
-      <button mat-flat-button color="warn" type="button" (click)="cancel()" class="cancel-btn">
+      <button
+        mat-flat-button
+        color="warn"
+        type="button"
+        (click)="cancel()"
+        class="cancel-btn"
+      >
         Cancel
       </button>
       <button

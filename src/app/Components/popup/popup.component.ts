@@ -9,7 +9,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class PopupComponent implements OnInit {
   images: string[] = [];
-
+  isNewProduct: boolean = true;
+  disabledBtn: boolean = true;
   popUpForm: FormGroup = new FormGroup({
     id: new FormControl(this.data?.id ?? null),
     title: new FormControl(this.data?.title ?? '', [
@@ -25,10 +26,6 @@ export class PopupComponent implements OnInit {
     ]),
     image: new FormControl(this.data?.image ?? ''),
   });
-
-  isNewProduct: boolean = true;
-
-  disabledBtn: boolean = true;
 
   constructor(
     public dialogRef: MatDialogRef<PopupComponent>,
@@ -75,15 +72,14 @@ export class PopupComponent implements OnInit {
       };
     }
     this.dialogRef.close(this.data);
-    console.log(this.popUpForm.controls['title'], 'title field');
-    console.log(this.popUpForm.controls['description'], 'description field');
   }
 
   // * File Upload Change
-  fileInputChange(event: any) {
+  fileInputChange(event: any, nameInput?: any) {
     for (let i = 0; i < event.target.files.length; i++) {
       let file = event.target.files[i];
       this.images.push(URL.createObjectURL(file));
+      nameInput.value = event.target.files[i].name;
     }
   }
 
